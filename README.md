@@ -47,7 +47,7 @@
 ### 图形化安装程序（推荐）
 
 双击 `installer/` 编译出的 **索尼延时摄影安装程序.exe**：程序自动检测相机是否连接、是否处于 MTP 模式，
-状态灯变绿后点「开始安装」→ 完成弹窗。APK 已内嵌在 exe 里，不需要另外找文件。安装程序下载路径：installer/索尼延时摄影安装程序.exe
+状态灯变绿后点「开始安装」→ 完成弹窗。APK 已内嵌在 exe 里，不需要另外找文件。安装程序下载路径：[installer/索尼延时摄影安装程序.exe](https://github.com/1809726146/sony-a7r2-timelapse/blob/d1828acd6b495493de07c102198f1957a0c9563c/installer/%E7%B4%A2%E5%B0%BC%E5%BB%B6%E6%97%B6%E6%91%84%E5%BD%B1%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F.exe)
 
 ```bash
 # 自行编译安装程序（Windows 自带 C# 编译器，无第三方依赖）
