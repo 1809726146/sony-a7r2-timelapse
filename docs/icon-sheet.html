@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>延时摄影 · 图标方案</title>
+<style>
+  :root{
+    --bg:#1A1A1A; --tile:#101010; --ink:#F0EFEA; --brass:#C49A6C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font:14px/1.4 "HarmonyOS Sans SC","Microsoft YaHei",sans-serif;padding:28px 32px}
+  h1{font-size:20px;font-weight:400;letter-spacing:.04em;margin-bottom:4px}
+  .sub{color:#93938B;font-size:12px;letter-spacing:.06em;margin-bottom:26px}
+  .row{display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap}
+  .card{width:512px}
+  .card .name{font-size:13px;letter-spacing:.08em;color:#C6C6BE;margin-bottom:10px}
+  .tile{width:512px;height:512px;background:var(--tile);position:relative;overflow:hidden}
+  .sm{display:flex;gap:16px;align-items:center;margin-top:14px}
+  .sm .box{width:48px;height:48px;background:var(--tile);position:relative;overflow:hidden}
+  .sm .box svg{width:48px;height:48px;display:block}
+  .sm .cap{font-size:11px;color:#6C727E;letter-spacing:.06em}
+  svg{display:block}
+</style>
+</head>
+<body>
+<h1>延时摄影 · 图标终选（512 / 48 双尺寸自检）</h1>
+<div class="sub">配色沿用机内 UI：黑底 #101010、暖白 #F0EFEA、唯一强调黄铜 #C49A6C；无渐变、无圆角、无阴影</div>
+
+<div class="row" id="row"></div>
+
+<script>
+const ICONS = [
+  {key:"B", name:"B · 三帧叠加（连续拍摄）",
+   svg:`<svg viewBox="0 0 512 512" width="512" height="512">
+     <rect width="512" height="512" fill="#101010"/>
+     <rect x="96" y="200" width="200" height="200" fill="none" stroke="#C49A6C" stroke-width="12" opacity=".35"/>
+     <rect x="152" y="152" width="200" height="200" fill="none" stroke="#C49A6C" stroke-width="12" opacity=".7"/>
+     <rect x="208" y="104" width="200" height="200" fill="#F0EFEA"/>
+   </svg>`},
+
+  {key:"E1", name:"E1 · 沙漏 · 暖白主体 + 黄铜腰线（推荐）",
+   svg:`<svg viewBox="0 0 512 512" width="512" height="512">
+     <rect width="512" height="512" fill="#101010"/>
+     <rect x="136" y="72" width="240" height="18" fill="#F0EFEA"/>
+     <rect x="136" y="422" width="240" height="18" fill="#F0EFEA"/>
+     <polygon points="160,102 352,102 256,246" fill="#F0EFEA"/>
+     <polygon points="160,410 352,410 256,266" fill="#F0EFEA"/>
+     <rect x="196" y="248" width="120" height="8" fill="#C49A6C"/>
+   </svg>`},
+
+  {key:"E2", name:"E2 · 沙漏 · 黄铜主体 + 暖白腰线",
+   svg:`<svg viewBox="0 0 512 512" width="512" height="512">
+     <rect width="512" height="512" fill="#101010"/>
+     <rect x="136" y="72" width="240" height="18" fill="#C49A6C"/>
+     <rect x="136" y="422" width="240" height="18" fill="#C49A6C"/>
+     <polygon points="160,102 352,102 256,246" fill="#C49A6C"/>
+     <polygon points="160,410 352,410 256,266" fill="#C49A6C"/>
+     <rect x="196" y="248" width="120" height="8" fill="#F0EFEA"/>
+   </svg>`},
+
+  {key:"E3", name:"E3 · 沙漏 + 底部刻度（间隔感）",
+   svg:`<svg viewBox="0 0 512 512" width="512" height="512">
+     <rect width="512" height="512" fill="#101010"/>
+     <rect x="150" y="64" width="212" height="16" fill="#F0EFEA"/>
+     <rect x="150" y="400" width="212" height="16" fill="#F0EFEA"/>
+     <polygon points="172,92 340,92 256,232" fill="#F0EFEA"/>
+     <polygon points="172,388 340,388 256,248" fill="#F0EFEA"/>
+     <rect x="120" y="440" width="272" height="4" fill="#C49A6C"/>
+     <rect x="120" y="432" width="4" height="20" fill="#C49A6C"/>
+     <rect x="252" y="436" width="4" height="12" fill="#C49A6C" opacity=".7"/>
+     <rect x="388" y="432" width="4" height="20" fill="#C49A6C"/>
+   </svg>`}
+];
+
+const row = document.getElementById("row");
+for (const ic of ICONS) {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `<div class="name">${ic.name}</div>
+    <div class="tile">${ic.svg}</div>
+    <div class="sm">
+      <div class="box">${ic.svg.replace(/width="512" height="512"/, 'width="48" height="48"')}</div>
+      <div class="cap">48px · 相机列表里的实际大小</div>
+    </div>`;
+  row.appendChild(card);
+}
+</script>
+</body>
+</html>

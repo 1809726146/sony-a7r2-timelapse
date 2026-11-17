@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>延时摄影 v4.0 · 预览界面（含实景）</title>
+<style>
+  :root{
+    --bg:#0A0A0A; --ink:#F0EFEA; --mid:#9A9A93; --dim:#5C5C56; --brass:#C49A6C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#151515;padding:28px;font-family:"Microsoft YaHei UI Light","Microsoft YaHei","Segoe UI Light",sans-serif;
+       display:flex;flex-wrap:wrap;gap:28px}
+  .wrap{display:flex;flex-direction:column;gap:8px}
+  .cap{color:#7a7a74;font-size:11px;letter-spacing:.12em}
+  .screen{position:relative;width:640px;height:480px;background:var(--bg);overflow:hidden;color:var(--ink)}
+  .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .scrim-t{position:absolute;left:0;right:0;top:0;height:96px;
+           background:linear-gradient(to bottom,rgba(5,5,5,.72),rgba(5,5,5,0))}
+  .scrim-b{position:absolute;left:0;right:0;bottom:0;height:250px;
+           background:linear-gradient(to bottom,rgba(6,6,6,0),rgba(6,6,6,.62) 34%,rgba(6,6,6,.9) 62%,rgba(6,6,6,.96))}
+  .center-scrim{position:absolute;left:110px;top:96px;width:420px;height:210px;
+           background:radial-gradient(closest-side,rgba(4,4,4,.66),rgba(4,4,4,0))}
+  .num{font-family:"Inter","Segoe UI Light","Segoe UI",sans-serif;font-weight:300;
+       font-variant-numeric:tabular-nums;letter-spacing:.01em}
+  .lbl{font-size:9px;letter-spacing:.14em;color:rgba(240,239,234,.52)}
+  .val{font-size:20px;line-height:1.1;color:var(--ink)}
+  .tiny{font-size:8px;letter-spacing:.14em;color:rgba(240,239,234,.62)}
+
+  .top-left{position:absolute;left:20px;top:16px;display:flex;align-items:baseline;gap:6px}
+  .top-left .n{font-size:22px;color:var(--ink)}
+  .top-left .u{font-size:9px;letter-spacing:.16em;color:var(--mid)}
+  .top-left .k{font-size:8px;letter-spacing:.16em;color:var(--dim);position:absolute;top:-11px;left:1px}
+  .top-right{position:absolute;right:20px;top:18px;font-size:9px;letter-spacing:.14em;color:var(--mid)}
+  .run{position:absolute;right:20px;top:34px;display:flex;align-items:center;gap:7px;font-size:9px;letter-spacing:.24em;color:var(--brass)}
+  .dot{width:5px;height:5px;border-radius:50%;background:var(--brass)}
+
+  .corner{position:absolute;width:14px;height:14px;border:1px solid rgba(240,239,234,.55)}
+  .c1{left:20px;top:76px;border-right:0;border-bottom:0}
+  .c2{right:20px;top:76px;border-left:0;border-bottom:0}
+  .c3{left:20px;bottom:139px;border-right:0;border-top:0}
+  .c4{right:20px;bottom:139px;border-left:0;border-top:0}
+  .af{position:absolute;left:404px;top:196px;width:24px;height:24px}
+  .af:before,.af:after{content:"";position:absolute;background:rgba(240,239,234,.85)}
+  .af:before{left:0;top:11.5px;width:24px;height:1px}
+  .af:after{left:11.5px;top:0;width:1px;height:24px}
+  .afmode{position:absolute;left:418px;top:190px;font-size:9px;letter-spacing:.14em;color:var(--mid)}
+
+  .bottom{position:absolute;left:0;right:0;bottom:0;height:150px;padding:0 20px}
+  .rule{height:1px;background:rgba(255,255,255,.10)}
+  .params{display:flex;gap:24px;padding:12px 0 10px}
+  .param{flex:1}
+  .param + .param{border-left:1px solid rgba(255,255,255,.09);padding-left:22px}
+  .param .lbl{display:block;margin-bottom:3px}
+
+  .scale{position:relative;height:26px;margin:2px 0 6px 24px;width:200px}
+  .scale .base{position:absolute;left:0;top:4px;width:200px;height:1px;background:rgba(255,255,255,.3)}
+  .scale i{position:absolute;top:0;width:1px;height:6px;background:rgba(255,255,255,.38)}
+  .scale i.major{top:-2px;height:10px;background:rgba(255,255,255,.62)}
+  .scale b{position:absolute;top:-3px;width:1px;height:14px;background:var(--brass)}
+  .badge{position:absolute;left:20px;top:6px;font-size:9px;letter-spacing:.2em;color:var(--brass)}
+
+  .row{display:flex;gap:34px;align-items:baseline;padding-bottom:12px}
+  .row .k{font-size:9px;letter-spacing:.14em;color:rgba(240,239,234,.5);margin-right:5px}
+  .row .v{font-size:14px;color:var(--ink)}
+  .row .v.num{font-size:15px}
+
+  .hint{position:absolute;left:20px;bottom:10px;font-size:8px;letter-spacing:.14em;color:var(--dim)}
+  .hint-r{position:absolute;right:20px;bottom:10px;font-size:8px;letter-spacing:.14em;color:var(--dim)}
+
+  .next{position:absolute;left:0;right:0;top:178px;text-align:center}
+  .next .k{font-size:9px;letter-spacing:.3em;color:var(--mid)}
+  .next .v{font-size:78px;line-height:1;color:var(--ink);margin-top:8px}
+  .next .v small{font-size:13px;letter-spacing:.18em;color:rgba(240,239,234,.62);margin-left:10px}
+  .prog{position:relative;margin-top:6px;height:1px;background:rgba(255,255,255,.12)}
+  .prog i{position:absolute;left:0;top:0;height:1px;background:var(--brass)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="cap">01 预览 · 待机</div>
+    <div class="screen">
+      <img class="photo" src="liveview.jpg" alt="">
+      <div class="scrim-t"></div><div class="scrim-b"></div><div class="center-scrim"></div>
+
+      <div class="top-left">
+        <span class="k">剩余</span>
+        <span class="n num">320</span><span class="u">张</span>
+      </div>
+      <div class="top-right">RAW · 4300K · 多重测光</div>
+
+      <div class="corner c1"></div><div class="corner c2"></div>
+      <div class="corner c3"></div><div class="corner c4"></div>
+      <div class="af"></div><div class="afmode">MF</div>
+
+      <div class="bottom">
+        <div class="rule"></div>
+        <div class="params">
+          <div class="param"><span class="lbl">ISO</span><span class="val num">1600</span></div>
+          <div class="param"><span class="lbl">快门</span><span class="val num">1/60</span></div>
+          <div class="param"><span class="lbl">光圈</span><span class="val num">f/4.0</span></div>
+        </div>
+        <div class="row" style="padding-top:2px">
+          <span><span class="v" style="color:var(--brass);font-size:13px">A</span></span>
+          <div class="scale">
+            <span class="base"></span>
+            <i class="major" style="left:0"></i><i style="left:16px"></i><i style="left:32px"></i>
+            <i class="major" style="left:48px"></i><i style="left:64px"></i><i style="left:80px"></i>
+            <i class="major" style="left:96px"></i><i style="left:112px"></i><i style="left:128px"></i>
+            <i class="major" style="left:144px"></i><i style="left:160px"></i><i style="left:176px"></i>
+            <i class="major" style="left:192px"></i>
+            <b style="left:96px"></b>
+          </div>
+          <span><span class="k">间隔</span><span class="v num">0:05</span></span>
+          <span><span class="k">张数</span><span class="v num">250</span></span>
+          <span><span class="k">已拍</span><span class="v num" style="color:var(--mid)">0</span></span>
+        </div>
+      </div>
+      <div class="hint">FN 菜单    中央 开始</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="cap">02 预览 · 拍摄中</div>
+    <div class="screen">
+      <img class="photo" src="liveview.jpg" alt="">
+      <div class="scrim-t"></div><div class="scrim-b"></div><div class="center-scrim"></div>
+
+      <div class="top-left">
+        <span class="k">剩余</span>
+        <span class="n num">198</span><span class="u">张</span>
+      </div>
+      <div class="top-right">RAW · 4300K</div>
+      <div class="run"><span class="dot"></span>RUN</div>
+
+      <div class="next">
+        <div class="k">下一张</div>
+        <div class="v num">3.2<small>秒</small></div>
+      </div>
+
+      <div class="bottom">
+        <div class="prog"><i style="width:125px"></i></div>
+        <div class="row" style="padding:8px 0 6px;justify-content:space-between">
+          <span class="tiny num">52 / 250</span>
+          <span class="tiny">已存 52 · 卡速 2.6s</span>
+        </div>
+        <div class="params" style="padding-top:6px">
+          <div class="param"><span class="lbl">ISO</span><span class="val num">100</span></div>
+          <div class="param"><span class="lbl">快门</span><span class="val num">1/30</span></div>
+          <div class="param"><span class="lbl">光圈</span><span class="val num">f/5.6</span></div>
+        </div>
+      </div>
+      <div class="hint">快门 暂停    ↑ 调光    FN 退出</div>
+      <div class="hint-r">屏幕 2/4</div>
+    </div>
+  </div>
+</body>
+</html>
