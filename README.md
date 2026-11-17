@@ -44,7 +44,7 @@
 
 装完相机重启一次 → 应用程序列表里出现「延时摄影」。
 
-### 方式一：图形化安装程序（推荐）
+### 图形化安装程序（推荐）
 
 双击 `installer/` 编译出的 **索尼延时摄影安装程序.exe**：程序自动检测相机是否连接、是否处于 MTP 模式，
 状态灯变绿后点「开始安装」→ 完成弹窗。APK 已内嵌在 exe 里，不需要另外找文件。
@@ -57,28 +57,6 @@ C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /target:winexe /platform
   /out:索尼延时摄影安装程序.exe Program.cs
 ```
 
-### 方式二：脚本一键装
-
-仓库根目录双击 `2-安装到相机.cmd`（会自动请求管理员权限），内部调用 `pmca-re` + 便携 Python 完成上传与安装。
-
-### 方式三：命令行
-
-```bash
-# 相机 USB 连接设为「MTP」，以管理员身份运行
-pmca-re\..\toolchain\python\python.exe pmca-re\pmca-console.py install -d native -f "dist\延时摄影-v5.5\延时摄影-v5.5.apk"
-```
-
-> 官方 PMCA 安装器不支持自编译 APK，请用上面三种方式之一。
-> 打包好的成品见 [Releases](https://github.com/1809726146/sony-a7r2-timelapse/releases/tag/v5.5)：
-> `sony-a7r2-timelapse-v5.5.zip`（APK + 界面图 + 安装说明）与 `sony-a7r2-timelapse-v5.5-manual.pdf`。
-
-### 自行编译 APK
-
-无需 Gradle，全流程为便携工具链（`toolchain/` 内 JDK 8 + Android SDK build-tools 25.0.2）：
-
-```
-1-编译APK.cmd     # aapt → javac → dx → aapt package → zipalign → apksigner(v1)
-```
 
 ---
 
